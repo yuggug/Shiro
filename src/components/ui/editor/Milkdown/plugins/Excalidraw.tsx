@@ -250,25 +250,29 @@ const ExcalidrawBoard: FC = () => {
 
         async function fullFileUpdateAsLink() {
           // 更新为链接类型
-          const currentData = valueRef.current
-          if (!currentData) return
-
-          const hasUploaded = alreadyUploadValueFileMap[currentData]
+          const currentData = valueRef.current;
+          if (!currentData) return;
+        
+          const hasUploaded = alreadyUploadValueFileMap[currentData];
           if (hasUploaded) {
-            return hasUploaded
+            return hasUploaded;
           }
-
-          const file = new File([currentData], 'file.excalidraw', {})
+        
+          const file = new File([currentData], 'file.excalidraw', {});
           const infoToast = toast.info('正在上传文件', {
             position: 'top-right',
-          })
-          const result = await uploadFileToServer(FileTypeEnum.File, file)
-
-          toast.success('上传成功', { position: 'top-right' })
-          toast.dismiss(infoToast)
-          const refName = `ref:file/${result.name}`
-          alreadyUploadValueFileMap[currentData] = refName
-          return refName
+          });
+        
+          // 确保 infoToast 不是 void 类型
+          if (infoToast) {
+            const result = await uploadFileToServer(FileTypeEnum.File, file);
+            toast.success('上传成功', { position: 'top-right' });
+            toast.dismiss(infoToast); // 只有当 infoToast 存在时才调用 dismiss
+          }
+        
+          const refName = `ref:file/${result.name}`;
+          alreadyUploadValueFileMap[currentData] = refName;
+          return refName;
         }
       }
       return (
@@ -360,6 +364,11 @@ const ExcalidrawBoard: FC = () => {
           key={key}
           data={content}
         />
+      </Suspense>
+    </div>
+  )
+}
+
       </Suspense>
     </div>
   )
