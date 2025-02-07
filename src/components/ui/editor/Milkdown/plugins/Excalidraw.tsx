@@ -263,8 +263,8 @@ const ExcalidrawBoard: FC = () => {
             position: 'top-right',
           });
         
-          // 确保 infoToast 不是 void 类型
-          if (infoToast) {
+          // 确保 infoToast 不是 undefined
+          if (infoToast !== undefined) {
             const result = await uploadFileToServer(FileTypeEnum.File, file);
             toast.success('上传成功', { position: 'top-right' });
             toast.dismiss(infoToast); // 只有当 infoToast 存在时才调用 dismiss
@@ -364,11 +364,6 @@ const ExcalidrawBoard: FC = () => {
           key={key}
           data={content}
         />
-      </Suspense>
-    </div>
-  )
-}
-
       </Suspense>
     </div>
   )
